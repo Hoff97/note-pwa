@@ -11,6 +11,10 @@ import { faPen } from '@fortawesome/free-solid-svg-icons'
 
 import './style.css';
 
+
+import {listItem as defaultListItem} from 'react-markdown/lib/renderers';
+import { CheckBox } from '../checkbox/checkbox';
+
 type Tab = 'write' | 'preview';
 
 interface NoteState {
@@ -19,7 +23,23 @@ interface NoteState {
     editTitle: boolean;
 }
 
+function generateCheckbox(checked: boolean) {
+    return checked ? '- [x]' : '- [ ]';
+}
+
+
 export class NoteComponent extends React.Component<{}, NoteState> {
+    renderListItem = (props: any) => {
+        if (props.checked !== null && props.checked !== undefined) {
+            const lineIndex = props.sourcePosition.start.line - 1;
+            return (
+                <li><CheckBox checked={props.checked} onChange={ev => this.toggleCheckbox(ev, lineIndex, props.checked)}/></li>
+            );
+        }
+        // otherwise default to list item
+        return defaultListItem(props);
+      }
+
     constructor(props: any) {
         super(props);
 
@@ -58,6 +78,21 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             ...this.state.note,
             markdown: value
         });
+    }
+
+    toggleCheckbox(ev: any, lineIndex: number, checked: boolean) {
+        const lines = this.state.note.markdown.split('\n');
+
+        lines[lineIndex] = lines[lineIndex].replace(
+            generateCheckbox(checked),
+            generateCheckbox(!checked)
+        );
+        this.setValue(lines.join('\n'));
+        
+        this.setTab('write');
+        setTimeout(() => {
+            this.setTab('preview');
+        }, 0);
     }
 
     setTab(tab: Tab) {
@@ -126,7 +161,11 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                     selectedTab={this.state.tab}
                     onTabChange={ev => this.setTab(ev)}
                     generateMarkdownPreview={markdown =>
-                        Promise.resolve(<ReactMarkdown source={markdown} />)
+                        Promise.resolve(
+                            <ReactMarkdown source={markdown}
+                                renderers={{listItem: this.renderListItem}}
+                                rawSourcePos={true}/>
+                        )
                     }
                 />
             </div>

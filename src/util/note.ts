@@ -55,7 +55,6 @@ export function getNote(id: number): Note | undefined {
     const notes = getNotes();
 
     for (let i = 0; i < notes.length; i++) {
-        console.log(notes[i], id);
         if (notes[i].id == id) {
             return notes[i];
         }
