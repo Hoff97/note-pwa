@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { getNote } from "../../util/note";
-import ReactMarkdown from 'react-markdown';
 
 import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { MarkDownWrap } from '../mdWrap/MarkDownWrap';
 
 interface NotePreviewProps {
     id: number;
@@ -25,16 +25,14 @@ export class NotePreview extends React.Component<NotePreviewProps, NotePreviewSt
             markdown: '',
             name: ''
         };
-    }
 
-    componentDidMount() {
         const note = getNote(this.props.id);
 
         if (note) {
-            this.setState({
+            this.state = {
                 markdown: note.markdown,
                 name: note.name
-            });
+            };
         }
     }
 
@@ -53,7 +51,7 @@ export class NotePreview extends React.Component<NotePreviewProps, NotePreviewSt
                         <FontAwesomeIcon icon={faTrash}/>
                     </span>
                 </div>
-                <ReactMarkdown source={this.state.markdown} />
+                <MarkDownWrap value={this.state.markdown} onChange={() => {}}/>
             </div>
         );
     }

@@ -48,7 +48,7 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
         this.props.onChange(value);
     }
 
-    toggleCheckbox(ev: any, lineIndex: number, checked: boolean) {
+    toggleCheckbox(ev: React.ChangeEvent<HTMLInputElement>, lineIndex: number, checked: boolean) {
         const lines = this.state.value.split('\n');
 
         lines[lineIndex] = lines[lineIndex].replace(
