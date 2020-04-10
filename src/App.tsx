@@ -1,24 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
+import { NoteComponent } from './components/note/Note';
+
+import 'purecss/build/base-min.css';
+import 'purecss/build/buttons-min.css';
+import 'purecss/build/grids-responsive-min.css';
+
 import './App.css';
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+import { Home } from './components/home/Home';
+
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className="pure-g center">
+        <div className="pure-u-1 pure-u-md-1-5">
+        </div>
+        <div className="pure-u-1 pure-u-md-3-5">
+          <Router>
+            <Switch>
+              <Route path="/note/:noteId" component={NoteComponent}>
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </Router>
+        </div>
+      </div>
     </div>
   );
 }

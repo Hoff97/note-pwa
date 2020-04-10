@@ -1,0 +1,27 @@
+div.preview {
+    min-height: 10px;
+    max-height: 200px;
+    border: 1px solid black;
+    border-radius: 5px;
+    overflow: hidden;
+    width: calc(100% - 40px);
+    box-shadow: 10px 10px 8px #888;
+    cursor: pointer;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+div.title {
+    font-size: 40px;
+    width: 100%;
+    background-image: linear-gradient(#EEE, #EEE 80%, #FFF 100%);
+}
+
+span.delete {
+    float: right;
+    font-size: 30px;
+    color: #F00;
+    margin-right: 20px;
+    margin-top: 5px;
+}
