@@ -23,7 +23,6 @@ function generateCheckbox(checked: boolean) {
 export class MarkDownWrap extends React.Component<MDProps, MDState> {
     renderListItem = (props: any) => {
         if (props.checked !== null && props.checked !== undefined) {
-            console.log(props);
             const lineIndex = props.sourcePosition.start.line - 1;
             return (
                 <li><CheckBox

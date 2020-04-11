@@ -15,4 +15,5 @@ div.note-title:hover > span.edit {
 
 input.editName {
     max-width: 60%;
+    font-size: 30px;
 }

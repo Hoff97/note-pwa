@@ -39,4 +39,4 @@ export function lineStart(str: string, position: number): number {
     return start;
 }
 
-export const listRegExp = /^(\s*)([-*]|(([0-9]+)\.))\s(\[[ x]\])?/;
+export const listRegExp = /^([\s>]*)(([-*]|(([0-9]+)\.))\s(\[[ x]\])?)?/;

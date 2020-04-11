@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import ReactMde from "react-mde";
+import ReactMde, { commands, TextState, TextApi } from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 
 import { getNote, saveNote } from '../../util/note';
@@ -12,6 +12,7 @@ import './style.css';
 
 import { MarkDownWrap } from '../mdWrap/MarkDownWrap';
 import { previousLine, listRegExp, currentLine, lineStart } from '../../util/strs';
+import { CommandGroup, GetIcon } from 'react-mde/lib/definitions/types';
 
 type Tab = 'write' | 'preview';
 
@@ -23,6 +24,28 @@ interface NoteState {
 
 export class NoteComponent extends React.Component<{}, NoteState> {
     input?: HTMLTextAreaElement;
+
+    commands: CommandGroup[] = [
+        ...commands.getDefaultCommands(),
+        /*{
+            commands: [
+                {
+                    name: 'Test',
+                    icon: (getIconFromProvider: GetIcon) => (
+                        <FontAwesomeIcon icon={faPen}/>
+                    ),
+                    // buttonProps?: any;
+                    children: [
+
+                    ],
+                    execute: (state: TextState, api: TextApi) => {
+                        console.log('Hi');
+                    }
+                    // keyCommand?: string;
+                }
+            ]
+        }*/
+    ];
 
     constructor(props: any) {
         super(props);
@@ -60,7 +83,6 @@ export class NoteComponent extends React.Component<{}, NoteState> {
     }
 
     handleKeyPress(ev: KeyboardEvent) {
-        console.log(ev);
         if (ev.key === 'Enter') {
             setTimeout(() => {
                 this.handleEnter(ev);
@@ -82,7 +104,6 @@ export class NoteComponent extends React.Component<{}, NoteState> {
         if (currLine) {
             const match = currLine.match(listRegExp);
             if (match) {
-                console.log(match);
                 const start = lineStart(note, position);
                 if (ev.shiftKey) {
                     if (match[1].length >= 4) {
@@ -115,13 +136,13 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             const match = prevLine.match(listRegExp);
             if (match) {
                 let str = match[1];
-                if (match[4] !== undefined) {
-                    str += `${parseInt(match[4]) + 1}. `
-                } else {
-                    str += `${match[2]} `;
+                if (match[5] !== undefined) {
+                    str += `${parseInt(match[5]) + 1}. `
+                } else if (match[3] !== undefined) {
+                    str += `${match[3]} `;
                 }
-                if (match[5]) {
-                    str += `${match[5]} `;
+                if (match[6]) {
+                    str += `${match[6]} `;
                 }
                 const newVal = [note.slice(0, position), str, note.slice(position)].join('');
                 
@@ -220,6 +241,7 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                                 onChange={value => this.setValue(value)}/>
                         )
                     }
+                    commands={this.commands}
                 />
             </div>
         );
