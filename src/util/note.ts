@@ -42,6 +42,7 @@ export function saveNote(note: Note) {
     const notes = getNotes();
 
     for (let i = 0; i < notes.length; i++) {
+        // eslint-disable-next-line
         if (notes[i].id == note.id) {
             notes[i] = note;
             break;
@@ -55,6 +56,7 @@ export function getNote(id: number): Note | undefined {
     const notes = getNotes();
 
     for (let i = 0; i < notes.length; i++) {
+        // eslint-disable-next-line
         if (notes[i].id == id) {
             return notes[i];
         }
@@ -67,6 +69,7 @@ export function deleteNote(id: number): Note[] {
     const notes = getNotes();
 
     for (let i = 0; i < notes.length; i++) {
+        // eslint-disable-next-line
         if (notes[i].id == id) {
             notes.splice(i, 1);
             break;
@@ -82,6 +85,7 @@ export function copyNote(id: number): Note[] {
     const notes = getNotes();
 
     for (let i = 0; i < notes.length; i++) {
+        // eslint-disable-next-line
         if (notes[i].id == id) {
             const copy = {
                 id: genId(notes),
