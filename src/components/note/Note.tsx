@@ -11,6 +11,7 @@ import { faPen } from '@fortawesome/free-solid-svg-icons'
 import './style.css';
 
 import { MarkDownWrap } from '../mdWrap/MarkDownWrap';
+import { previousLine, listRegExp, currentLine, lineStart } from '../../util/strs';
 
 type Tab = 'write' | 'preview';
 
@@ -21,6 +22,8 @@ interface NoteState {
 }
 
 export class NoteComponent extends React.Component<{}, NoteState> {
+    input?: HTMLTextAreaElement;
+
     constructor(props: any) {
         super(props);
 
@@ -44,6 +47,90 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             this.setState({
                 note
             });
+        }
+    }
+
+    componentDidUpdate() {
+        let input = document.getElementsByClassName('mde-text');
+        if (input.length > 0 && !this.input) {
+            this.input = input[0] as HTMLTextAreaElement;
+
+            this.input.addEventListener('keydown', this.handleKeyPress.bind(this));
+        }
+    }
+
+    handleKeyPress(ev: KeyboardEvent) {
+        console.log(ev);
+        if (ev.key === 'Enter') {
+            setTimeout(() => {
+                this.handleEnter(ev);
+            }, 10);
+        } else if (ev.key === 'Tab') {
+            ev.preventDefault();
+            setTimeout(() => {
+                this.handleTab(ev);
+            }, 10);
+        }
+    }
+
+    handleTab(ev: KeyboardEvent) {
+        const position: number = (ev.target as any).selectionStart;
+
+        const note = this.state.note.markdown;
+
+        const currLine = currentLine(note, position);
+        if (currLine) {
+            const match = currLine.match(listRegExp);
+            if (match) {
+                console.log(match);
+                const start = lineStart(note, position);
+                if (ev.shiftKey) {
+                    if (match[1].length >= 4) {
+                        const newVal = [note.slice(0, start), note.slice(start+4)].join('');
+                        this.setValue(newVal);
+                        setTimeout(() => {
+                            (ev.target as any).selectionStart =  position - 4;
+                            (ev.target as any).selectionEnd =  position - 4;
+                        }, 0);
+                    }
+                } else {
+                    const newVal = [note.slice(0, start), '    ', note.slice(start)].join('');
+                    this.setValue(newVal);
+                    setTimeout(() => {
+                        (ev.target as any).selectionStart =  position + 4;
+                        (ev.target as any).selectionEnd =  position + 4;
+                    }, 0);
+                }
+            }
+        }
+    }
+
+    handleEnter(ev: KeyboardEvent) {
+        const position: number = (ev.target as any).selectionStart;
+
+        const note = this.state.note.markdown;
+
+        const prevLine = previousLine(note, position);
+        if (prevLine) {
+            const match = prevLine.match(listRegExp);
+            if (match) {
+                let str = match[1];
+                if (match[4] !== undefined) {
+                    str += `${parseInt(match[4]) + 1}. `
+                } else {
+                    str += `${match[2]} `;
+                }
+                if (match[5]) {
+                    str += `${match[5]} `;
+                }
+                const newVal = [note.slice(0, position), str, note.slice(position)].join('');
+                
+                this.setValue(newVal);
+                setTimeout(() => {
+                    (ev.target as any).selectionStart =  position + str.length;
+                    (ev.target as any).selectionEnd =  position + str.length;
+                }, 0);
+            }
         }
     }
 
