@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.ff104cca.chunk.css",
-    "main.js": "/static/js/main.344eb420.chunk.js",
-    "main.js.map": "/static/js/main.344eb420.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.2a146b8e.js",
-    "runtime-main.js.map": "/static/js/runtime-main.2a146b8e.js.map",
-    "static/css/2.1fba6b52.chunk.css": "/static/css/2.1fba6b52.chunk.css",
-    "static/js/2.852ccb47.chunk.js": "/static/js/2.852ccb47.chunk.js",
-    "static/js/2.852ccb47.chunk.js.map": "/static/js/2.852ccb47.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.4f3db72e528a205c685d6951d19dcb96.js": "/precache-manifest.4f3db72e528a205c685d6951d19dcb96.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.1fba6b52.chunk.css.map": "/static/css/2.1fba6b52.chunk.css.map",
-    "static/css/main.ff104cca.chunk.css.map": "/static/css/main.ff104cca.chunk.css.map",
-    "static/js/2.852ccb47.chunk.js.LICENSE.txt": "/static/js/2.852ccb47.chunk.js.LICENSE.txt"
+    "main.css": "/note-pwa/static/css/main.ff104cca.chunk.css",
+    "main.js": "/note-pwa/static/js/main.d0863df7.chunk.js",
+    "main.js.map": "/note-pwa/static/js/main.d0863df7.chunk.js.map",
+    "runtime-main.js": "/note-pwa/static/js/runtime-main.5a667aa7.js",
+    "runtime-main.js.map": "/note-pwa/static/js/runtime-main.5a667aa7.js.map",
+    "static/css/2.1fba6b52.chunk.css": "/note-pwa/static/css/2.1fba6b52.chunk.css",
+    "static/js/2.852ccb47.chunk.js": "/note-pwa/static/js/2.852ccb47.chunk.js",
+    "static/js/2.852ccb47.chunk.js.map": "/note-pwa/static/js/2.852ccb47.chunk.js.map",
+    "index.html": "/note-pwa/index.html",
+    "precache-manifest.7d814d57f40cbe1f91e5960275d99ddc.js": "/note-pwa/precache-manifest.7d814d57f40cbe1f91e5960275d99ddc.js",
+    "service-worker.js": "/note-pwa/service-worker.js",
+    "static/css/2.1fba6b52.chunk.css.map": "/note-pwa/static/css/2.1fba6b52.chunk.css.map",
+    "static/css/main.ff104cca.chunk.css.map": "/note-pwa/static/css/main.ff104cca.chunk.css.map",
+    "static/js/2.852ccb47.chunk.js.LICENSE.txt": "/note-pwa/static/js/2.852ccb47.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.2a146b8e.js",
+    "static/js/runtime-main.5a667aa7.js",
     "static/css/2.1fba6b52.chunk.css",
     "static/js/2.852ccb47.chunk.js",
     "static/css/main.ff104cca.chunk.css",
-    "static/js/main.344eb420.chunk.js"
+    "static/js/main.d0863df7.chunk.js"
   ]
 }
