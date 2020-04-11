@@ -197,7 +197,8 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                     <input value={this.state.note.name}
                         onChange={val => this.setName(val.target.value)}
                         onKeyUp={ev => this.editKeyUp(ev)}
-                        autoFocus={true}/>
+                        autoFocus={true}
+                        className="editName"/>
                     <span className="edit">
                         <FontAwesomeIcon icon={faPen}/>
                     </span>

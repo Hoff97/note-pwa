@@ -12,3 +12,7 @@ div.note-title > span.edit {
 div.note-title:hover > span.edit {
     visibility: visible;
 }
+
+input.editName {
+    max-width: 60%;
+}
