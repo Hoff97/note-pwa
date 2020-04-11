@@ -6,6 +6,8 @@ import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { MarkDownWrap } from '../mdWrap/MarkDownWrap';
+import { colorClass } from '../note/Note';
+import { Color } from '../../util/types';
 
 interface NotePreviewProps {
     id: number;
@@ -14,7 +16,8 @@ interface NotePreviewProps {
 
 interface NotePreviewState {
     markdown: string;
-    name: string
+    name: string;
+    color: Color;
 }
 
 export class NotePreview extends React.Component<NotePreviewProps, NotePreviewState> {
@@ -23,7 +26,8 @@ export class NotePreview extends React.Component<NotePreviewProps, NotePreviewSt
 
         this.state = {
             markdown: '',
-            name: ''
+            name: '',
+            color: 'white'
         };
 
         const note = getNote(this.props.id);
@@ -31,7 +35,8 @@ export class NotePreview extends React.Component<NotePreviewProps, NotePreviewSt
         if (note) {
             this.state = {
                 markdown: note.markdown,
-                name: note.name
+                name: note.name,
+                color: note.color
             };
         }
     }
@@ -44,14 +49,16 @@ export class NotePreview extends React.Component<NotePreviewProps, NotePreviewSt
 
     render() {
         return (
-            <div className="preview">
+            <div className={`preview ${colorClass(this.state.color)}`}>
                 <div className="title">
                     {this.state.name}
                     <span className="delete" onClick={ev => this.delete(ev)}>
                         <FontAwesomeIcon icon={faTrash}/>
                     </span>
                 </div>
-                <MarkDownWrap value={this.state.markdown} onChange={() => {}}/>
+                <MarkDownWrap
+                    value={this.state.markdown}
+                    onChange={() => {}}/>
             </div>
         );
     }

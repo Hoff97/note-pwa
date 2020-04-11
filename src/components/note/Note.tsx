@@ -4,9 +4,9 @@ import ReactMde, { commands, TextState, TextApi } from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 
 import { getNote, saveNote } from '../../util/note';
-import { Note } from '../../util/types';
+import { Note, colors, Color } from '../../util/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faEyeDropper, faCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './style.css';
 
@@ -22,29 +22,37 @@ interface NoteState {
     editTitle: boolean;
 }
 
+export function colorClass(color: Color) {
+    return color;
+}
+
 export class NoteComponent extends React.Component<{}, NoteState> {
     input?: HTMLTextAreaElement;
 
     commands: CommandGroup[] = [
         ...commands.getDefaultCommands(),
-        /*{
+        {
             commands: [
                 {
                     name: 'Test',
                     icon: (getIconFromProvider: GetIcon) => (
-                        <FontAwesomeIcon icon={faPen}/>
+                        <FontAwesomeIcon icon={faEyeDropper}/>
                     ),
-                    // buttonProps?: any;
-                    children: [
-
-                    ],
-                    execute: (state: TextState, api: TextApi) => {
-                        console.log('Hi');
-                    }
-                    // keyCommand?: string;
+                    children: colors.map(color => (
+                        {
+                            name: 'C1',
+                            icon: (getIconFromProvider: GetIcon) => (
+                                <span style={{color}}>
+                                    <FontAwesomeIcon icon={faCircle}/>
+                                </span>
+                            ),
+                            execute: (state: TextState, api: TextApi) => {
+                                this.setColor(color);
+                            }
+                        }))
                 }
             ]
-        }*/
+        }
     ];
 
     constructor(props: any) {
@@ -54,7 +62,8 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             note: {
                 markdown: '',
                 id: -1,
-                name: 'Placeholder'
+                name: 'Placeholder',
+                color: 'white'
             },
             tab: 'write',
             editTitle: false
@@ -175,6 +184,20 @@ export class NoteComponent extends React.Component<{}, NoteState> {
         });
     }
 
+    setColor(color: Color) {
+        this.setState({
+            note: {
+                ...this.state.note,
+                color
+            }
+        });
+
+        saveNote({
+            ...this.state.note,
+            color
+        });
+    }
+
     toggleEdit() {
         this.setState({
             editTitle: !this.state.editTitle
@@ -237,11 +260,16 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                     onTabChange={ev => this.setTab(ev)}
                     generateMarkdownPreview={markdown =>
                         Promise.resolve(
-                            <MarkDownWrap value={this.state.note.markdown}
+                            <MarkDownWrap
+                                value={this.state.note.markdown}
                                 onChange={value => this.setValue(value)}/>
                         )
                     }
                     commands={this.commands}
+                    classes={{
+                        textArea: colorClass(this.state.note.color),
+                        preview: colorClass(this.state.note.color)
+                    }}
                 />
             </div>
         );

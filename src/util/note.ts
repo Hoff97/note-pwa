@@ -11,7 +11,13 @@ export function getNotes(): Note[] {
     if (notes === null) {
         notes = "[]";
     }
-    return JSON.parse(notes);
+    const ret = JSON.parse(notes);
+    for (var i = 0; i < ret.length; i++) {
+        if (ret[i].color === undefined) {
+            ret[i].color = 'white';
+        }
+    }
+    return ret;
 }
 
 function genId(notes: Note[]) {
@@ -35,10 +41,11 @@ export function noteContent(type: NoteType) {
 export function newNote(markdown: string): number {
     const notes = getNotes();
 
-    const note = {
+    const note: Note = {
         id: genId(notes),
         name: 'New note',
-        markdown
+        markdown,
+        color: 'white'
     }
 
     notes.push(note);
@@ -100,7 +107,8 @@ export function copyNote(id: number): Note[] {
             const copy = {
                 id: genId(notes),
                 name: notes[i].name + ' - Copy',
-                markdown: notes[i].markdown
+                markdown: notes[i].markdown,
+                color: notes[i].color
             };
             notes.push(copy);
             break;
