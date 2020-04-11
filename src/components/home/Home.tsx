@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Note } from '../../util/types';
 import { Route } from 'react-router-dom';
-import { getNotes, newNote, deleteNote, copyNote } from '../../util/note';
+import { getNotes, newNote, deleteNote, copyNote, NoteType, noteContent } from '../../util/note';
 import { NotePreview } from '../note-preview/NotePreview';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 
 import './style.css';
 
@@ -30,8 +30,8 @@ export class Home extends React.Component<{}, HomeState> {
         });
     }
 
-    newNote(history: any) {
-        const id = newNote('');
+    newNote(history: any, type: NoteType = 'empty') {
+        const id = newNote(noteContent(type));
 
         history.push(`/note/${id}`)
     }
@@ -61,8 +61,11 @@ export class Home extends React.Component<{}, HomeState> {
                     <tbody>
                         <tr className="actions">
                             <td className="actions">
-                                <button className="pure-button" onClick={() => this.newNote(history)}>
+                                <button className="pure-button mr-2" onClick={() => this.newNote(history)}>
                                     <FontAwesomeIcon icon={faPlus}/>
+                                </button>
+                                <button className="pure-button" onClick={() => this.newNote(history, 'checklist')}>
+                                    <FontAwesomeIcon icon={faCheckSquare}/>
                                 </button>
                             </td>
                         </tr>

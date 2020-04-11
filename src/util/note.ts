@@ -22,6 +22,16 @@ function genId(notes: Note[]) {
     }
 }
 
+export type NoteType = 'empty' | 'checklist';
+
+export function noteContent(type: NoteType) {
+    if (type === 'empty') {
+        return '';
+    } else {
+        return '- [ ] ';
+    }
+}
+
 export function newNote(markdown: string): number {
     const notes = getNotes();
 
