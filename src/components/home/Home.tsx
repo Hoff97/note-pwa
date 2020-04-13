@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 
 import './style.css';
+import { fetchNotes, login, createNote } from '../../network/note';
 
 interface HomeState {
     notes: Note[];
@@ -28,6 +29,14 @@ export class Home extends React.Component<{}, HomeState> {
         this.setState({
             notes: getNotes()
         });
+
+        // fetchNotes();
+        login('hoff', 'password').then(x => {
+            return fetchNotes();
+        }).then(x => {
+            console.log(x);
+            return createNote(x[0]);
+        });
     }
 
     newNote(history: any, type: NoteType = 'empty') {
@@ -36,18 +45,18 @@ export class Home extends React.Component<{}, HomeState> {
         history.push(`/note/${id}`)
     }
 
-    toNote(id: number, history: any) {
+    toNote(id: string, history: any) {
         history.push(`/note/${id}`)
     }
 
-    deleteNote(id: number) {
+    deleteNote(id: string) {
         const notes = deleteNote(id);
         this.setState({
             notes: notes
         });
     }
 
-    copyNote(id: number) {
+    copyNote(id: string) {
         const notes = copyNote(id);
         this.setState({
             notes: notes

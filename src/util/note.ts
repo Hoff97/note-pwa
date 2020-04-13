@@ -1,5 +1,7 @@
 import { Note } from "./types";
 
+import { uuid } from 'uuidv4';
+
 const localStorageKey = 'notes';
 
 export function saveNotes(notes: Note[]) {
@@ -20,12 +22,8 @@ export function getNotes(): Note[] {
     return ret;
 }
 
-function genId(notes: Note[]) {
-    if (notes.length === 0) {
-        return 0;
-    } else {
-        return notes[notes.length - 1].id + 1;
-    }
+function genId(): string {
+    return uuid();
 }
 
 export type NoteType = 'empty' | 'checklist';
@@ -38,14 +36,15 @@ export function noteContent(type: NoteType) {
     }
 }
 
-export function newNote(markdown: string): number {
+export function newNote(markdown: string): string {
     const notes = getNotes();
 
     const note: Note = {
-        id: genId(notes),
+        id: genId(),
         name: 'New note',
         markdown,
-        color: 'white'
+        color: 'white',
+        timestamp: (new Date()).toISOString()
     }
 
     notes.push(note);
@@ -69,7 +68,7 @@ export function saveNote(note: Note) {
     saveNotes(notes);
 }
 
-export function getNote(id: number): Note | undefined {
+export function getNote(id: string): Note | undefined {
     const notes = getNotes();
 
     for (let i = 0; i < notes.length; i++) {
@@ -82,7 +81,7 @@ export function getNote(id: number): Note | undefined {
     return undefined;
 }
 
-export function deleteNote(id: number): Note[] {
+export function deleteNote(id: string): Note[] {
     const notes = getNotes();
 
     for (let i = 0; i < notes.length; i++) {
@@ -98,17 +97,18 @@ export function deleteNote(id: number): Note[] {
     return notes;
 }
 
-export function copyNote(id: number): Note[] {
+export function copyNote(id: string): Note[] {
     const notes = getNotes();
 
     for (let i = 0; i < notes.length; i++) {
         // eslint-disable-next-line
         if (notes[i].id == id) {
             const copy = {
-                id: genId(notes),
+                id: genId(),
                 name: notes[i].name + ' - Copy',
                 markdown: notes[i].markdown,
-                color: notes[i].color
+                color: notes[i].color,
+                timestamp: notes[i].timestamp
             };
             notes.push(copy);
             break;

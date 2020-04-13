@@ -10,8 +10,8 @@ import { colorClass } from '../note/Note';
 import { Color } from '../../util/types';
 
 interface NotePreviewProps {
-    id: number;
-    deleteClicked: (id:  number) => void;
+    id: string;
+    deleteClicked: (id: string) => void;
 }
 
 interface NotePreviewState {

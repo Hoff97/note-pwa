@@ -61,9 +61,10 @@ export class NoteComponent extends React.Component<{}, NoteState> {
         this.state = {
             note: {
                 markdown: '',
-                id: -1,
+                id: '',
                 name: 'Placeholder',
-                color: 'white'
+                color: 'white',
+                timestamp: ''
             },
             tab: 'write',
             editTitle: false
