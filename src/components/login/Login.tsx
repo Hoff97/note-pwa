@@ -3,6 +3,9 @@ import { Route } from 'react-router-dom';
 
 import './style.css';
 import { loginService } from '../../network/login.service';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import {  faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 interface LoginState {
     error?: string;
@@ -65,6 +68,9 @@ export class Login extends React.Component<{}, LoginState> {
     render() {
         return <Route render={({ history }) => (
             <div className="login">
+                <button className="pure-button" onClick={() => history.goBack()}>
+                    <FontAwesomeIcon icon={faArrowLeft}/>
+                </button>
                 <form className="pure-form"
                         onSubmit={ev => this.login(history, ev)}>
                     <fieldset>

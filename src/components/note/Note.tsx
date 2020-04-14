@@ -14,6 +14,9 @@ import { previousLine, listRegExp, currentLine, lineStart } from '../../util/str
 import { CommandGroup, GetIcon } from 'react-mde/lib/definitions/types';
 import { noteService } from '../../util/note';
 
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { Route } from 'react-router-dom';
+
 type Tab = 'write' | 'preview';
 
 interface NoteState {
@@ -227,10 +230,13 @@ export class NoteComponent extends React.Component<{}, NoteState> {
     }
 
     render() {
-        let title;
+        let title: any;
         if (!this.state.editTitle) {
-            title = (
+            title = (history: any) => (
                 <div className="note-title" onClick={() => this.toggleEdit()}>
+                    <button className="pure-button" onClick={() => history.goBack()}>
+                        <FontAwesomeIcon icon={faArrowLeft}/>
+                    </button>
                     {this.state.note.name}
                     <span className="edit">
                         <FontAwesomeIcon icon={faPen}/>
@@ -238,7 +244,7 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                 </div>
             );
         } else {
-            title = (
+            title = (history: any) => (
                 <div className="note-title">
                     <input value={this.state.note.name}
                         onChange={val => this.setName(val.target.value)}
@@ -253,27 +259,29 @@ export class NoteComponent extends React.Component<{}, NoteState> {
         }
 
         return (
-            <div>
-                {title}
-                <ReactMde
-                    value={this.state.note.markdown}
-                    onChange={ev => this.setValue(ev)}
-                    selectedTab={this.state.tab}
-                    onTabChange={ev => this.setTab(ev)}
-                    generateMarkdownPreview={markdown =>
-                        Promise.resolve(
-                            <MarkDownWrap
-                                value={this.state.note.markdown}
-                                onChange={value => this.setValue(value)}/>
-                        )
-                    }
-                    commands={this.commands}
-                    classes={{
-                        textArea: colorClass(this.state.note.color),
-                        preview: colorClass(this.state.note.color)
-                    }}
-                />
-            </div>
+            <Route render={({ history }) => (
+                <div>
+                    {title(history)}
+                    <ReactMde
+                        value={this.state.note.markdown}
+                        onChange={ev => this.setValue(ev)}
+                        selectedTab={this.state.tab}
+                        onTabChange={ev => this.setTab(ev)}
+                        generateMarkdownPreview={markdown =>
+                            Promise.resolve(
+                                <MarkDownWrap
+                                    value={this.state.note.markdown}
+                                    onChange={value => this.setValue(value)}/>
+                            )
+                        }
+                        commands={this.commands}
+                        classes={{
+                            textArea: colorClass(this.state.note.color),
+                            preview: colorClass(this.state.note.color)
+                        }}
+                    />
+                </div>
+            )}/>
         );
     }
 }
