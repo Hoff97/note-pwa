@@ -6,7 +6,7 @@ export class LoginService {
 
     token: string | null = localStorage.getItem(LoginService.localStorageKey);
 
-    loggedInEv = new Emitter();
+    loggedInEv = new Emitter<void>();
 
     public async login(username: string, password: string) {
         const response = await fetch(`${urlPrefix}/api-token-auth/`, {
@@ -20,10 +20,12 @@ export class LoginService {
             })
         });
 
-        console.log(response);
         const json = await response.json();
         this.token = json.token;
         localStorage.setItem(LoginService.localStorageKey, json.token);
+
+        this.loggedInEv.emit();
+
         return this.token;
     }
 

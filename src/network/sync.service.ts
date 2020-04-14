@@ -5,7 +5,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 export class SyncService<T extends HasIdTimestamp> {
     constructor(private entityService: EntityService<T>, private name: string){
-
+        loginService.loggedInEv.subscribe(() => {
+            this.getEntities().then(x => {
+            });
+        });
     }
 
     storeEntities(entities: T[]) {
@@ -147,7 +150,7 @@ export class SyncService<T extends HasIdTimestamp> {
             } catch {
             }
         }
-        const notes = await this.getEntities();
+        const notes = this.getEntitiesLocal();
 
         for (let i = 0; i < notes.length; i++) {
             // eslint-disable-next-line

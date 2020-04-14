@@ -1,7 +1,7 @@
 import { toNetworkData, fromNetworkData, HasIdTimestamp } from "../util/types";
 import { loginService } from "./login.service";
 
-export const urlPrefix = 'http://localhost:8000/api';
+export const urlPrefix = 'https://detext.haskai.de/syncify/api';
 
 export class EntityService<T extends HasIdTimestamp> {
 
