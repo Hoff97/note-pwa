@@ -1,18 +1,19 @@
 import * as React from 'react';
-import { Note } from '../../util/types';
+import { Note, NewNote, NoteType } from '../../util/types';
 import { Route } from 'react-router-dom';
-import { getNotes, newNote, deleteNote, copyNote, NoteType, noteContent } from '../../util/note';
 import { NotePreview } from '../note-preview/NotePreview';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCheckSquare, faUser } from '@fortawesome/free-solid-svg-icons';
 
 import './style.css';
-import { fetchNotes, login, createNote } from '../../network/note';
+import { loginService } from '../../network/login.service';
+import { noteService } from '../../util/note';
 
 interface HomeState {
     notes: Note[];
     choosing: boolean;
+    loggedIn: boolean;
 }
 
 export class Home extends React.Component<{}, HomeState> {
@@ -21,46 +22,51 @@ export class Home extends React.Component<{}, HomeState> {
 
         this.state = {
             notes: [],
-            choosing: false
+            choosing: false,
+            loggedIn: false
         };
     }
 
     componentDidMount(){
-        this.setState({
-            notes: getNotes()
+        noteService.getEntities().then(notes => {
+            this.setState({
+                notes
+            });
         });
 
-        // fetchNotes();
-        login('hoff', 'password').then(x => {
-            return fetchNotes();
-        }).then(x => {
-            console.log(x);
-            return createNote(x[0]);
-        });
+        if (loginService.loggedIn()) {
+            this.setState({
+                loggedIn: true
+            });
+        }
     }
 
-    newNote(history: any, type: NoteType = 'empty') {
-        const id = newNote(noteContent(type));
+    async newNote(history: any, type: NoteType = 'empty') {
+        const note: NewNote = {
+            name: 'New Note',
+            markdown: type === 'empty' ? '' : '- [ ] ',
+            color: 'white'
+        }
 
-        history.push(`/note/${id}`)
+        const id = await noteService.createEntity(note);
+
+        history.push(`/note/${id}`);
     }
 
     toNote(id: string, history: any) {
-        history.push(`/note/${id}`)
+        history.push(`/note/${id}`);
     }
 
     deleteNote(id: string) {
-        const notes = deleteNote(id);
-        this.setState({
-            notes: notes
+        noteService.deleteEntity(id).then(notes => {
+            this.setState({
+                notes: notes
+            });
         });
     }
 
-    copyNote(id: string) {
-        const notes = copyNote(id);
-        this.setState({
-            notes: notes
-        });
+    login(history: any) {
+        history.push(`/login/`)
     }
 
     render() {
@@ -76,6 +82,12 @@ export class Home extends React.Component<{}, HomeState> {
                                 <button className="pure-button" onClick={() => this.newNote(history, 'checklist')}>
                                     <FontAwesomeIcon icon={faCheckSquare}/>
                                 </button>
+                                {!this.state.loggedIn ? (
+                                    <button className="pure-button login" onClick={() => this.login(history)}>
+                                        <FontAwesomeIcon icon={faUser}/>
+                                    </button>
+                                    ) : <div></div>
+                                }
                             </td>
                         </tr>
                         {this.state.notes.map(note => {

@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { getNote } from "../../util/note";
-
 import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { MarkDownWrap } from '../mdWrap/MarkDownWrap';
 import { colorClass } from '../note/Note';
 import { Color } from '../../util/types';
+import { noteService } from '../../util/note';
 
 interface NotePreviewProps {
     id: string;
@@ -30,7 +29,7 @@ export class NotePreview extends React.Component<NotePreviewProps, NotePreviewSt
             color: 'white'
         };
 
-        const note = getNote(this.props.id);
+        const note = noteService.getEntity(this.props.id);
 
         if (note) {
             this.state = {

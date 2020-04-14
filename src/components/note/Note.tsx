@@ -3,7 +3,6 @@ import * as React from 'react';
 import ReactMde, { commands, TextState, TextApi } from "react-mde";
 import "react-mde/lib/styles/css/react-mde-all.css";
 
-import { getNote, saveNote } from '../../util/note';
 import { Note, colors, Color } from '../../util/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faEyeDropper, faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -13,6 +12,7 @@ import './style.css';
 import { MarkDownWrap } from '../mdWrap/MarkDownWrap';
 import { previousLine, listRegExp, currentLine, lineStart } from '../../util/strs';
 import { CommandGroup, GetIcon } from 'react-mde/lib/definitions/types';
+import { noteService } from '../../util/note';
 
 type Tab = 'write' | 'preview';
 
@@ -74,7 +74,7 @@ export class NoteComponent extends React.Component<{}, NoteState> {
     componentDidMount() {
         const noteId = (this.props as any).match.params.noteId;
 
-        const note = getNote(noteId);
+        const note = noteService.getEntity(noteId);
 
         if (note) {
             this.setState({
@@ -173,7 +173,7 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             }
         });
 
-        saveNote({
+        noteService.updateEntity({
             ...this.state.note,
             markdown: value
         });
@@ -193,7 +193,7 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             }
         });
 
-        saveNote({
+        noteService.updateEntity({
             ...this.state.note,
             color
         });
@@ -213,7 +213,7 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             }
         });
 
-        saveNote({
+        noteService.updateEntity({
             ...this.state.note,
             name: value
         });

@@ -20,10 +20,14 @@ export interface Note extends HasIdTimestamp {
     color: Color;
 }
 
+export type NoteType = 'empty' | 'checklist';
+
+export type WithoutIdTimestamp<T> = Omit<Omit<T, 'id'>, 'timestamp'>;
+
 export interface NetworkData<T extends HasIdTimestamp> {
     id: string;
     timestamp: string;
-    data: Omit<Omit<T, 'id'>, 'timestamp'>;
+    data: WithoutIdTimestamp<T>;
 }
 
 export function toNetworkData<T extends HasIdTimestamp>(data: T): NetworkData<T> {
@@ -32,7 +36,7 @@ export function toNetworkData<T extends HasIdTimestamp>(data: T): NetworkData<T>
     };
     delete copy.id;
     delete copy.timestamp;
-    
+
     return {
         id: data.id,
         timestamp: data.timestamp,
@@ -51,3 +55,5 @@ export function fromNetworkData<T extends HasIdTimestamp>(data: NetworkData<T>):
 export interface NetworkNote extends NetworkData<Note> {
 
 };
+
+export type NewNote = WithoutIdTimestamp<Note>;
