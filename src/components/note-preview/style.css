@@ -5,6 +5,7 @@ div.preview {
     border-radius: 5px;
     overflow: hidden;
     width: calc(100% - 40px);
+    max-width: 90vw;
     box-shadow: 10px 10px 8px #888;
     cursor: pointer;
     margin-bottom: 20px;
