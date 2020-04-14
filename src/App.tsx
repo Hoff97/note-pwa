@@ -23,7 +23,7 @@ function App() {
         <div className="pure-u-1 pure-u-md-1-5">
         </div>
         <div className="pure-u-1 pure-u-md-3-5">
-          <Router>
+          <Router basename={process.env.PUBLIC_URL}>
             <Switch>
               <Route path="/note/:noteId" component={NoteComponent}>
               </Route>
