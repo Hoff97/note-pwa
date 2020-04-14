@@ -11,7 +11,7 @@ export interface HasTimestamp {
 }
 
 export interface HasIdTimestamp extends HasId, HasTimestamp {
-
+    synchronized: boolean;
 }
 
 export interface Note extends HasIdTimestamp {
@@ -22,7 +22,7 @@ export interface Note extends HasIdTimestamp {
 
 export type NoteType = 'empty' | 'checklist';
 
-export type WithoutIdTimestamp<T> = Omit<Omit<T, 'id'>, 'timestamp'>;
+export type WithoutIdTimestamp<T> = Omit<Omit<Omit<T, 'id'>, 'timestamp'>, 'synchronized'>;
 
 export interface NetworkData<T extends HasIdTimestamp> {
     id: string;
@@ -48,6 +48,7 @@ export function fromNetworkData<T extends HasIdTimestamp>(data: NetworkData<T>):
     return {
         id: data.id,
         timestamp: data.timestamp,
+        synchronized: true,
         ...data.data
     } as any;
 }

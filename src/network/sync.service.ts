@@ -46,7 +46,7 @@ export class SyncService<T extends HasIdTimestamp> {
                         } else {
                             newEnts.push(entMap[localEnt.id]);
                         }
-                    } else {
+                    } else if (!localEnt.synchronized) {
                         localNewEnts.push(localEnt);
                     }
                 }
