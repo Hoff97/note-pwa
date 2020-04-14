@@ -29,6 +29,31 @@ export class LoginService {
         return this.token;
     }
 
+    logout() {
+        this.token = null;
+    }
+
+    public async register(username: string, password: string) {
+        const response = await fetch(`${urlPrefix}/api-token-auth/`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username, password
+            })
+        });
+
+        const json = await response.json();
+        this.token = json.token;
+        localStorage.setItem(LoginService.localStorageKey, json.token);
+
+        this.loggedInEv.emit();
+
+        return this.token;
+    }
+
     loggedIn(): boolean {
         return !!this.token;
     }

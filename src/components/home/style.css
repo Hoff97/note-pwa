@@ -11,3 +11,7 @@ td.actions {
 button.login {
     float: right;
 }
+
+button.logout {
+    float: right;
+}

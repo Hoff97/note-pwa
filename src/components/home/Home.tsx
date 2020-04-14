@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 import { NotePreview } from '../note-preview/NotePreview';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCheckSquare, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCheckSquare, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 import './style.css';
 import { loginService } from '../../network/login.service';
@@ -69,6 +69,13 @@ export class Home extends React.Component<{}, HomeState> {
         history.push(`/login/`)
     }
 
+    logout() {
+        loginService.logout();
+        this.setState({
+            loggedIn: loginService.loggedIn()
+        });
+    }
+
     render() {
         return <Route render={({ history }) => (
             <div className="home">
@@ -86,7 +93,11 @@ export class Home extends React.Component<{}, HomeState> {
                                     <button className="pure-button login" onClick={() => this.login(history)}>
                                         <FontAwesomeIcon icon={faUser}/>
                                     </button>
-                                    ) : <div></div>
+                                    ) : (
+                                    <button className="pure-button logout" onClick={() => this.logout()}>
+                                        <FontAwesomeIcon icon={faSignOutAlt}/>
+                                    </button>
+                                    )
                                 }
                             </td>
                         </tr>
