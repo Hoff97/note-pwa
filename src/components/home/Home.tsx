@@ -28,17 +28,16 @@ export class Home extends React.Component<{}, HomeState> {
     }
 
     componentDidMount(){
+        this.setState({
+            notes: noteService.getEntitiesLocal(),
+            loggedIn: loginService.loggedIn()
+        });
+
         noteService.getEntities().then(notes => {
             this.setState({
                 notes
             });
         });
-
-        if (loginService.loggedIn()) {
-            this.setState({
-                loggedIn: true
-            });
-        }
     }
 
     async newNote(history: any, type: NoteType = 'empty') {
