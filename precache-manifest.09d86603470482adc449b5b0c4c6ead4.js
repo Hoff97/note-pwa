@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "1b9db2071d9080e43689cb9a4e193ecb",
+    "revision": "eb27817a1398bc94698ee2f397fd073d",
     "url": "/note-pwa/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/note-pwa/static/css/2.1fba6b52.chunk.css"
   },
   {
-    "revision": "47aba81ea4950561464f",
-    "url": "/note-pwa/static/css/main.a6ac2be0.chunk.css"
+    "revision": "2dfc7c98d153b81cf378",
+    "url": "/note-pwa/static/css/main.ef7f81ef.chunk.css"
   },
   {
     "revision": "8e335749f1156927384f",
@@ -20,7 +20,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/note-pwa/static/js/2.9e62d697.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "47aba81ea4950561464f",
+    "revision": "2dfc7c98d153b81cf378",
     "url": "/note-pwa/static/js/main.62bb24c3.chunk.js"
   },
   {
