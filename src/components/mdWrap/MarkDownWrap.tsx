@@ -24,11 +24,17 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
     renderListItem = (props: any) => {
         if (props.checked !== null && props.checked !== undefined) {
             const lineIndex = props.sourcePosition.start.line - 1;
+            let labels = props.children.filter((child: any) => !child.key.startsWith('list'));
+            let lists = props.children.filter((child: any) => child.key.startsWith('list'));
+
             return (
-                <li><CheckBox
-                    checked={props.checked} 
-                    onChange={ev => this.toggleCheckbox(ev, lineIndex, props.checked)}
-                    children={props.children}/></li>
+                <li>
+                    <CheckBox
+                        checked={props.checked}
+                        onChange={ev => this.toggleCheckbox(ev, lineIndex, props)}
+                        labels={labels}/>
+                    {lists}
+                </li>
             );
         }
         // otherwise default to list item
@@ -51,12 +57,14 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
         this.props.onChange(value);
     }
 
-    toggleCheckbox(ev: React.ChangeEvent<HTMLInputElement>, lineIndex: number, checked: boolean) {
+    toggleCheckbox(ev: React.ChangeEvent<HTMLInputElement>, lineIndex: number, props: any) {
         const lines = this.state.value.split('\n');
 
+        console.log(props);
+
         lines[lineIndex] = lines[lineIndex].replace(
-            generateCheckbox(checked),
-            generateCheckbox(!checked)
+            generateCheckbox(props.checked),
+            generateCheckbox(!props.checked)
         );
         this.setValue(lines.join('\n'));
     }

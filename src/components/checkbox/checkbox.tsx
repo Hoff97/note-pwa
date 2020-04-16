@@ -4,14 +4,15 @@ import './style.css';
 
 interface CheckboxProps {
     checked: boolean;
-    children: JSX.Element[];
     onChange: (change: React.ChangeEvent<HTMLInputElement>) => void;
+    labels: JSX.Element[];
 }
 
-export function CheckBox({ checked, onChange, children }: CheckboxProps) {
+export function CheckBox({ checked, onChange, labels }: CheckboxProps) {
     return (
-        <label className="checkbox-container">{children}
-            <input type="checkbox" checked={checked} onChange={ev => onChange(ev)}/>
+        <label className="checkbox-container">{labels}
+            <input type="checkbox" checked={checked}
+                onChange={ev => onChange(ev)}/>
             <span className="checkbox-checkmark"></span>
         </label>
     );
