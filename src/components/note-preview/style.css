@@ -16,7 +16,7 @@ div.preview {
 div.title {
     font-size: 40px;
     width: 100%;
-    background-image: linear-gradient(#EEE, #EEE 80%, #FFF 100%);
+    background-image: linear-gradient(#EEE, #EEE 80%, rgba(255,255,255,0));
 }
 
 span.delete {
