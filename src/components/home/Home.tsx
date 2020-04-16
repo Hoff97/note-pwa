@@ -9,6 +9,7 @@ import { faPlus, faCheckSquare, faUser, faSignOutAlt } from '@fortawesome/free-s
 import './style.css';
 import { loginService } from '../../network/login.service';
 import { noteService } from '../../util/note';
+import { Tab } from 'react-mde/lib/definitions/types/Tab';
 
 interface HomeState {
     notes: Note[];
@@ -52,8 +53,8 @@ export class Home extends React.Component<{}, HomeState> {
         history.push(`/note/${id}?tab=write`);
     }
 
-    toNote(id: string, history: any) {
-        history.push(`/note/${id}?tab=preview`);
+    toNote(id: string, history: any, tab: Tab = 'preview') {
+        history.push(`/note/${id}?tab=${tab}`);
     }
 
     deleteNote(id: string) {
@@ -103,7 +104,9 @@ export class Home extends React.Component<{}, HomeState> {
                         {this.state.notes.map(note => {
                             return <tr className="note" key={note.id}>
                                 <td className="note" onClick={() => this.toNote(note.id, history)}>
-                                    <NotePreview id={note.id} deleteClicked={id => this.deleteNote(id)}/>
+                                    <NotePreview id={note.id}
+                                        deleteClicked={id => this.deleteNote(id)}
+                                        editClicked={id => this.toNote(id, history, 'write')}/>
                                 </td>
                             </tr>
                         })}

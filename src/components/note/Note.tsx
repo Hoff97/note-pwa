@@ -16,8 +16,7 @@ import { noteService } from '../../util/note';
 
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Route } from 'react-router-dom';
-
-type Tab = 'write' | 'preview';
+import { Tab } from 'react-mde/lib/definitions/types/Tab';
 
 interface NoteState {
     note: Note;

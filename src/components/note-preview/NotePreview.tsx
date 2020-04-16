@@ -2,7 +2,7 @@ import React from 'react';
 
 import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { MarkDownWrap } from '../mdWrap/MarkDownWrap';
 import { colorClass } from '../note/Note';
 import { Color } from '../../util/types';
@@ -11,6 +11,7 @@ import { noteService } from '../../util/note';
 interface NotePreviewProps {
     id: string;
     deleteClicked: (id: string) => void;
+    editClicked: (id: string) => void;
 }
 
 interface NotePreviewState {
@@ -40,6 +41,12 @@ export class NotePreview extends React.Component<NotePreviewProps, NotePreviewSt
         }
     }
 
+    edit(ev: React.MouseEvent) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.editClicked(this.props.id);
+    }
+
     delete(ev: React.MouseEvent) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -53,6 +60,9 @@ export class NotePreview extends React.Component<NotePreviewProps, NotePreviewSt
                     {this.state.name}
                     <span className="delete" onClick={ev => this.delete(ev)}>
                         <FontAwesomeIcon icon={faTrash}/>
+                    </span>
+                    <span className="edit-preview" onClick={ev => this.edit(ev)}>
+                        <FontAwesomeIcon icon={faEdit}/>
                     </span>
                 </div>
                 <MarkDownWrap
