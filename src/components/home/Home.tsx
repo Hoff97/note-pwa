@@ -49,11 +49,11 @@ export class Home extends React.Component<{}, HomeState> {
 
         const id = await noteService.createEntity(note);
 
-        history.push(`/note/${id}`);
+        history.push(`/note/${id}?tab=write`);
     }
 
     toNote(id: string, history: any) {
-        history.push(`/note/${id}`);
+        history.push(`/note/${id}?tab=preview`);
     }
 
     deleteNote(id: string) {

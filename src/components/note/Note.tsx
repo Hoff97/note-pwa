@@ -80,9 +80,19 @@ export class NoteComponent extends React.Component<{}, NoteState> {
 
         const note = noteService.getEntity(noteId);
 
+        let tab: Tab = 'write';
+        if (window.location.search) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paramTab = urlParams.get('tab');
+            if (paramTab === 'write' || paramTab === 'preview') {
+                tab = paramTab;
+            }
+        }
+
         if (note) {
             this.setState({
-                note
+                note,
+                tab
             });
         }
     }
@@ -159,7 +169,7 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                     str += `${match[6]} `;
                 }
                 const newVal = [note.slice(0, position), str, note.slice(position)].join('');
-                
+
                 this.setValue(newVal);
                 setTimeout(() => {
                     (ev.target as any).selectionStart =  position + str.length;
@@ -229,12 +239,17 @@ export class NoteComponent extends React.Component<{}, NoteState> {
         }
     }
 
+    goBack(ev: React.MouseEvent, history: any) {
+        ev.stopPropagation();
+        history.goBack();
+    }
+
     render() {
         let title: any;
         if (!this.state.editTitle) {
             title = (history: any) => (
                 <div className="note-title" onClick={() => this.toggleEdit()}>
-                    <button className="pure-button" onClick={() => history.goBack()}>
+                    <button className="pure-button" onClick={ev => this.goBack(ev, history)}>
                         <FontAwesomeIcon icon={faArrowLeft}/>
                     </button>
                     {this.state.note.name}
@@ -270,7 +285,7 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                         generateMarkdownPreview={markdown =>
                             Promise.resolve(
                                 <MarkDownWrap
-                                    value={this.state.note.markdown}
+                                    value={markdown}
                                     onChange={value => this.setValue(value)}/>
                             )
                         }
