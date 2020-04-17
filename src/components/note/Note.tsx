@@ -251,10 +251,12 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                     <button className="pure-button" onClick={ev => this.goBack(ev, history)}>
                         <FontAwesomeIcon icon={faArrowLeft}/>
                     </button>
-                    {this.state.note.name}
-                    <span className="edit">
-                        <FontAwesomeIcon icon={faPen}/>
-                    </span>
+                    <div className="edit-region">
+                        {this.state.note.name}
+                        <span className="edit">
+                            <FontAwesomeIcon icon={faPen}/>
+                        </span>
+                    </div>
                 </div>
             );
         } else {

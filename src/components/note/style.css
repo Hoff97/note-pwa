@@ -9,13 +9,17 @@ div.note-title > button {
     margin-right: 1em;
 }
 
-div.note-title > span.edit {
+div.edit-region {
+    display: inline;
+}
+
+div.edit-region > span.edit {
     font-size: 30px;
     margin-left: 5px;
     visibility: hidden;
 }
 
-div.note-title:hover > span.edit {
+div.edit-region:hover > span.edit {
     visibility: visible;
 }
 
