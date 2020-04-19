@@ -31,3 +31,8 @@ input.editName {
 .react-calendar {
     color: #000;
 }
+
+.mde-preview-content {
+    overflow: hidden;
+    word-break: keep-all;
+}
