@@ -23,8 +23,13 @@ function generateCheckbox(checked: boolean) {
     return checked ? '- [x]' : '- [ ]';
 }
 
+function isPreviewLink(props: any) {
+    return props.children.length === 0 ||
+        (props.children.length === 1 && props.children[0].props.children === props.href);
+}
+
 function isNoLabel(child: any) {
-    return child.key.startsWith('list') || (child.key.startsWith('link') && child.props.children.length === 0);
+    return child.key.startsWith('list') || (child.key.startsWith('link') && isPreviewLink(child.props));
 }
 
 export class MarkDownWrap extends React.Component<MDProps, MDState> {
@@ -57,7 +62,7 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
       }
 
     renderLink = (props: any) => {
-        if (props.children.length === 0) {
+        if (isPreviewLink(props)) {
             return (
                 <div className="react-tiny-link-wrap">
                     <ReactTinyLink
