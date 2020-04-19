@@ -11,12 +11,15 @@ import './style.css';
 
 import { MarkDownWrap } from '../mdWrap/MarkDownWrap';
 import { previousLine, listRegExp, currentLine, lineStart } from '../../util/strs';
-import { CommandGroup, GetIcon } from 'react-mde/lib/definitions/types';
+import { CommandGroup, GetIcon, Suggestion } from 'react-mde/lib/definitions/types';
 import { noteService } from '../../util/note';
 
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Route } from 'react-router-dom';
 import { Tab } from 'react-mde/lib/definitions/types/Tab';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import { formatDate } from '../../util/util';
 
 interface NoteState {
     note: Note;
@@ -31,13 +34,15 @@ export function colorClass(color: Color) {
 export class NoteComponent extends React.Component<{}, NoteState> {
     input?: HTMLTextAreaElement;
 
+    editorRef: React.RefObject<ReactMde>;
+
     commands: CommandGroup[] = [
         ...commands.getDefaultCommands(),
         {
             commands: [
                 {
                     name: 'Test',
-                    icon: (getIconFromProvider: GetIcon) => (
+                    icon: (_getIconFromProvider: GetIcon) => (
                         <FontAwesomeIcon icon={faEyeDropper}/>
                     ),
                     children: colors.map(color => (
@@ -72,6 +77,8 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             tab: 'write',
             editTitle: false
         };
+
+        this.editorRef = React.createRef();
     }
 
     componentDidMount() {
@@ -243,6 +250,55 @@ export class NoteComponent extends React.Component<{}, NoteState> {
         history.goBack();
     }
 
+    insertDate(date: Date | Date[]) {
+        if (Array.isArray(date)) {
+            date = date[0];
+        }
+
+        if (this.editorRef.current) {
+            const textArea = this.editorRef.current.textAreaRef;
+
+            const end = textArea.selectionStart;
+            let start = end;
+            while (start > 0) {
+                if (this.state.note.markdown[start] === '@') {
+                    break;
+                }
+                start--;
+            }
+            const before = this.state.note.markdown.slice(0, start);
+            const after = this.state.note.markdown.slice(end);
+            const format = formatDate(date) + ' ';
+            this.setValue(before + format + after);
+
+            setTimeout(() => {
+                textArea.selectionStart = before.length + format.length;
+                textArea.selectionEnd = before.length + format.length;
+                textArea.dispatchEvent(new KeyboardEvent('keydown', {
+                    bubbles: true,
+                    key: 'Escape'
+                }));
+            }, 10);
+        }
+    }
+
+    loadSuggestions(text: string): Promise<Suggestion[]> {
+        if (text.length === 0) {
+            return Promise.resolve([
+                {
+                    preview: (
+                        <div onClick={ev => ev.stopPropagation()}>
+                            <Calendar
+                                onChange={date => this.insertDate(date)}/>
+                        </div>
+                    ),
+                    value: '('
+                }
+            ]);
+        }
+        return Promise.resolve([]);
+    }
+
     render() {
         let title: any;
         if (!this.state.editTitle) {
@@ -295,6 +351,9 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                             textArea: colorClass(this.state.note.color),
                             preview: colorClass(this.state.note.color)
                         }}
+                        suggestionTriggerCharacters={['@']}
+                        loadSuggestions={(text: string) => this.loadSuggestions(text)}
+                        ref={this.editorRef}
                     />
                 </div>
             )}/>

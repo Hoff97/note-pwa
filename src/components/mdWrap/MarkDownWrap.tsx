@@ -8,7 +8,7 @@ import { dates } from '../../util/plugin';
 import 'react-calendar/dist/Calendar.css';
 
 import { DateComponent } from '../renderers/Date';
-import { formatNumber } from '../../util/util';
+import { formatDate } from '../../util/util';
 import { Link } from '../renderers/Link';
 import { ListItem } from '../renderers/ListItem';
 
@@ -65,7 +65,7 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
     setDate(date: Date, sourcePosition: any) {
         const before = this.state.value.slice(0, sourcePosition.start.offset);
         const after = this.state.value.slice(sourcePosition.end.offset)
-        const format = `@date(${date.getFullYear()},${formatNumber(date.getMonth() + 1)},${formatNumber(date.getDate())})`;
+        const format = formatDate(date);
 
         this.setValue(before + format + after);
     }

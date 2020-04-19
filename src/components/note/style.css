@@ -27,3 +27,7 @@ input.editName {
     max-width: 60%;
     font-size: 30px;
 }
+
+.react-calendar {
+    color: #000;
+}
