@@ -5,8 +5,6 @@ import ReactMarkdown from 'react-markdown';
 import {listItem as defaultListItem} from 'react-markdown/lib/renderers';
 import { CheckBox } from '../checkbox/checkbox';
 
-import { ReactTinyLink } from 'react-tiny-link';
-
 import './style.css';
 import { dates } from '../../util/plugin';
 
@@ -14,6 +12,7 @@ import 'react-calendar/dist/Calendar.css';
 
 import { DateComponent } from '../renderers/Date';
 import { formatNumber } from '../../util/util';
+import { Link, isPreviewLink } from '../renderers/Link';
 
 interface MDState {
     value: string;
@@ -26,11 +25,6 @@ interface MDProps {
 
 function generateCheckbox(checked: boolean) {
     return checked ? '- [x]' : '- [ ]';
-}
-
-function isPreviewLink(props: any) {
-    return props.children.length === 0 ||
-        (props.children.length === 1 && props.children[0].props.children === props.href);
 }
 
 function isNoLabel(child: any) {
@@ -64,28 +58,6 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
         }
         return defaultListItem(props);
       }
-
-    renderLink = (props: any) => {
-        if (isPreviewLink(props)) {
-            return (
-                <div className="react-tiny-link-wrap">
-                    <ReactTinyLink
-                        cardSize="small"
-                        showGraphic={true}
-                        maxLine={2}
-                        minLine={1}
-                        url={props.href}
-                        />
-                </div>
-            );
-        } else {
-            return (
-                <a href={props.href}>
-                    {props.children}
-                </a>
-            );
-        }
-    }
 
     renderParagraph = (props: any) => {
         return (
@@ -134,7 +106,7 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
             <ReactMarkdown source={this.state.value}
                 renderers={{
                     listItem: this.renderListItem,
-                    link: this.renderLink,
+                    link: Link,
                     paragraph: this.renderParagraph,
                     date: props => {
                         return (
