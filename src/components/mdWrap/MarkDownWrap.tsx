@@ -2,9 +2,6 @@ import * as React from 'react';
 
 import ReactMarkdown from 'react-markdown';
 
-import {listItem as defaultListItem} from 'react-markdown/lib/renderers';
-import { CheckBox } from '../checkbox/checkbox';
-
 import './style.css';
 import { dates } from '../../util/plugin';
 
@@ -12,7 +9,8 @@ import 'react-calendar/dist/Calendar.css';
 
 import { DateComponent } from '../renderers/Date';
 import { formatNumber } from '../../util/util';
-import { Link, isPreviewLink } from '../renderers/Link';
+import { Link } from '../renderers/Link';
+import { ListItem } from '../renderers/ListItem';
 
 interface MDState {
     value: string;
@@ -27,38 +25,9 @@ function generateCheckbox(checked: boolean) {
     return checked ? '- [x]' : '- [ ]';
 }
 
-function isNoLabel(child: any) {
-    return child.key.startsWith('list') || (child.key.startsWith('link') && isPreviewLink(child.props));
-}
+type ChangeInput = React.ChangeEvent<HTMLInputElement>;
 
 export class MarkDownWrap extends React.Component<MDProps, MDState> {
-    renderListItem = (props: any) => {
-        if (props.checked !== null && props.checked !== undefined) {
-            const lineIndex = props.sourcePosition.start.line - 1;
-            let labels = props.children.filter((child: any) => !isNoLabel(child));
-            let lists = props.children.filter((child: any) => isNoLabel(child));
-
-            if (labels.length === 0) {
-                labels.push((
-                    <span key={`placeholder-${props.sourcePosition.start.line}`}>
-                        &nbsp;
-                    </span>
-                ));
-            }
-
-            return (
-                <li>
-                    <CheckBox
-                        checked={props.checked}
-                        onChange={ev => this.toggleCheckbox(ev, lineIndex, props)}
-                        labels={labels}/>
-                    {lists}
-                </li>
-            );
-        }
-        return defaultListItem(props);
-      }
-
     renderParagraph = (props: any) => {
         return (
             <>
@@ -83,7 +52,7 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
         this.props.onChange(value);
     }
 
-    toggleCheckbox(ev: React.ChangeEvent<HTMLInputElement>, lineIndex: number, props: any) {
+    toggleCheckbox(ev: ChangeInput, lineIndex: number, props: any) {
         const lines = this.state.value.split('\n');
 
         lines[lineIndex] = lines[lineIndex].replace(
@@ -105,7 +74,13 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
         return (
             <ReactMarkdown source={this.state.value}
                 renderers={{
-                    listItem: this.renderListItem,
+                    listItem: props => {
+                        return (
+                            <ListItem
+                                toggleCheckbox={(ev: ChangeInput, lineIndex: number, props: any) => this.toggleCheckbox(ev, lineIndex, props)}
+                                {...props}/>
+                        );
+                    },
                     link: Link,
                     paragraph: this.renderParagraph,
                     date: props => {
