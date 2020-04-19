@@ -2,13 +2,18 @@ import * as React from 'react';
 
 import ReactMarkdown from 'react-markdown';
 
-
 import {listItem as defaultListItem} from 'react-markdown/lib/renderers';
 import { CheckBox } from '../checkbox/checkbox';
 
 import { ReactTinyLink } from 'react-tiny-link';
 
 import './style.css';
+import { dates } from '../../util/plugin';
+
+import 'react-calendar/dist/Calendar.css';
+
+import { DateComponent } from '../renderers/Date';
+import { formatNumber } from '../../util/util';
 
 interface MDState {
     value: string;
@@ -57,7 +62,6 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
                 </li>
             );
         }
-        // otherwise default to list item
         return defaultListItem(props);
       }
 
@@ -117,15 +121,31 @@ export class MarkDownWrap extends React.Component<MDProps, MDState> {
         this.setValue(lines.join('\n'));
     }
 
+    setDate(date: Date, sourcePosition: any) {
+        const before = this.state.value.slice(0, sourcePosition.start.offset);
+        const after = this.state.value.slice(sourcePosition.end.offset)
+        const format = `@date(${date.getFullYear()},${formatNumber(date.getMonth() + 1)},${formatNumber(date.getDate())})`;
+
+        this.setValue(before + format + after);
+    }
+
     render() {
         return (
             <ReactMarkdown source={this.state.value}
                 renderers={{
                     listItem: this.renderListItem,
                     link: this.renderLink,
-                    paragraph: this.renderParagraph
+                    paragraph: this.renderParagraph,
+                    date: props => {
+                        return (
+                            <DateComponent
+                                setDate={(date: Date, sp: any) => this.setDate(date, sp)}
+                                {...props}/>
+                        );
+                    }
                 }}
-                rawSourcePos={true}/>
+                rawSourcePos={true}
+                plugins={[dates]}/>
         );
     }
 }
