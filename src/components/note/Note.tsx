@@ -25,6 +25,7 @@ interface NoteState {
     note: Note;
     tab: Tab;
     editTitle: boolean;
+    loaded: boolean;
 }
 
 export function colorClass(color: Color) {
@@ -75,7 +76,8 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                 synchronized: false
             },
             tab: 'write',
-            editTitle: false
+            editTitle: false,
+            loaded: false
         };
 
         this.editorRef = React.createRef();
@@ -98,7 +100,8 @@ export class NoteComponent extends React.Component<{}, NoteState> {
         if (note) {
             this.setState({
                 note,
-                tab
+                tab,
+                loaded: true
             });
         }
     }
@@ -300,6 +303,10 @@ export class NoteComponent extends React.Component<{}, NoteState> {
     }
 
     render() {
+        if (!this.state.loaded) {
+            return (<></>);
+        }
+
         let title: any;
         if (!this.state.editTitle) {
             title = (history: any) => (
@@ -330,6 +337,11 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             )
         }
 
+        const lines = this.state.note.markdown.split('\n').length;
+
+        const maxHeight = window.innerHeight - 200;
+        const minHeight = Math.min(maxHeight, Math.max(300, lines*22));
+
         return (
             <Route render={({ history }) => (
                 <div>
@@ -354,6 +366,8 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                         suggestionTriggerCharacters={['@']}
                         loadSuggestions={(text: string) => this.loadSuggestions(text)}
                         ref={this.editorRef}
+                        minEditorHeight={minHeight}
+                        maxEditorHeight={maxHeight}
                     />
                 </div>
             )}/>
