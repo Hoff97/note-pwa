@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/note-pwa/static/css/main.eee48468.chunk.css",
-    "main.js": "/note-pwa/static/js/main.c7b24242.chunk.js",
-    "main.js.map": "/note-pwa/static/js/main.c7b24242.chunk.js.map",
+    "main.js": "/note-pwa/static/js/main.bce361f5.chunk.js",
+    "main.js.map": "/note-pwa/static/js/main.bce361f5.chunk.js.map",
     "runtime-main.js": "/note-pwa/static/js/runtime-main.5a667aa7.js",
     "runtime-main.js.map": "/note-pwa/static/js/runtime-main.5a667aa7.js.map",
     "static/css/2.f79af568.chunk.css": "/note-pwa/static/css/2.f79af568.chunk.css",
-    "static/js/2.a552e7ec.chunk.js": "/note-pwa/static/js/2.a552e7ec.chunk.js",
-    "static/js/2.a552e7ec.chunk.js.map": "/note-pwa/static/js/2.a552e7ec.chunk.js.map",
+    "static/js/2.21443f8b.chunk.js": "/note-pwa/static/js/2.21443f8b.chunk.js",
+    "static/js/2.21443f8b.chunk.js.map": "/note-pwa/static/js/2.21443f8b.chunk.js.map",
     "index.html": "/note-pwa/index.html",
-    "precache-manifest.5d251434907c0a0f4004a0f96fbf075a.js": "/note-pwa/precache-manifest.5d251434907c0a0f4004a0f96fbf075a.js",
+    "precache-manifest.ba2c42bfeb6bb5d8de74868f6c322ad2.js": "/note-pwa/precache-manifest.ba2c42bfeb6bb5d8de74868f6c322ad2.js",
     "service-worker.js": "/note-pwa/service-worker.js",
     "static/css/2.f79af568.chunk.css.map": "/note-pwa/static/css/2.f79af568.chunk.css.map",
     "static/css/main.eee48468.chunk.css.map": "/note-pwa/static/css/main.eee48468.chunk.css.map",
-    "static/js/2.a552e7ec.chunk.js.LICENSE.txt": "/note-pwa/static/js/2.a552e7ec.chunk.js.LICENSE.txt"
+    "static/js/2.21443f8b.chunk.js.LICENSE.txt": "/note-pwa/static/js/2.21443f8b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.5a667aa7.js",
     "static/css/2.f79af568.chunk.css",
-    "static/js/2.a552e7ec.chunk.js",
+    "static/js/2.21443f8b.chunk.js",
     "static/css/main.eee48468.chunk.css",
-    "static/js/main.c7b24242.chunk.js"
+    "static/js/main.bce361f5.chunk.js"
   ]
 }
