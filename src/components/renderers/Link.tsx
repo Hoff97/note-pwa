@@ -17,6 +17,7 @@ export function Link(props: any) {
                     maxLine={2}
                     minLine={1}
                     url={props.href}
+                    maxCacheAge={1000*1000*1000}
                     />
             </div>
         );
