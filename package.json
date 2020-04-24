@@ -25,7 +25,7 @@
     "react-mde": "^8.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "react-tiny-link": "^3.3.1",
+    "react-tiny-link": "file:lib/react-tiny-link/react-tiny-link-3.3.1.tgz",
     "react-tooltip-lite": "^1.11.2",
     "typescript": "^3.7.5",
     "uuid": "^7.0.3"
