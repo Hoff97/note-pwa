@@ -7,6 +7,8 @@ export function isPreviewLink(props: any) {
         (props.children.length === 1 && props.children[0].props.children === props.href);
 }
 
+const proxyUrl = 'https://detext.haskai.de/cors/';
+
 export function Link(props: any) {
     if (isPreviewLink(props)) {
         return (
@@ -18,6 +20,7 @@ export function Link(props: any) {
                     minLine={1}
                     url={props.href}
                     maxCacheAge={1000*1000*1000}
+                    proxyUrl={proxyUrl}
                     />
             </div>
         );
