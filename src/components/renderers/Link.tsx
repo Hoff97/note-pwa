@@ -9,6 +9,8 @@ export function isPreviewLink(props: any) {
 
 const proxyUrl = 'https://detext.haskai.de/cors';
 
+const maxCacheAge = 24*60*60*1000;
+
 export function Link(props: any) {
     if (isPreviewLink(props)) {
         return (
@@ -19,7 +21,7 @@ export function Link(props: any) {
                     maxLine={2}
                     minLine={1}
                     url={props.href}
-                    maxCacheAge={1000*1000*1000}
+                    maxCacheAge={maxCacheAge}
                     proxyUrl={proxyUrl}
                     />
             </div>
