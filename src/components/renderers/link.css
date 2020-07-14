@@ -1,0 +1,10 @@
+@media (prefers-color-scheme: dark) {
+    a.react_tinylink_card {
+        background-color: #162447;
+        color: #bbe1fa;
+    }
+
+    div.react_tinylink_card_content_wrapper > header > p {
+        color: #bbe1fa;
+    }
+}

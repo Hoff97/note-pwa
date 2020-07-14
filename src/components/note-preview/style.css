@@ -34,3 +34,14 @@ span.edit-preview {
     margin-right: 20px;
     margin-top: 5px;
 }
+
+@media (prefers-color-scheme: dark) {
+    div.title {
+        background-image: linear-gradient(#203050, #203050 80%, rgba(255,255,255,0));
+    }
+
+    div.preview {
+        border: 1px solid #bbe1fa;
+        box-shadow: 10px 10px 8px #888;
+    }
+}

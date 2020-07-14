@@ -15,3 +15,37 @@ span.date:hover {
 .react-tooltip-lite-arrow {
     border-color: #333;
 }
+
+@media (prefers-color-scheme: dark) {
+    span.date {
+        color: #bbe1fa;
+    }
+
+    div.react-calendar {
+        background: #162447;
+        color: #bbe1fa;
+    }
+
+    button.react-calendar__tile--now {
+        background-color: #3282b8;
+    }
+
+    button.react-calendar__tile:hover {
+        background-color: #bbe1fa;
+        color: #162447;
+    }
+
+    div.react-calendar__navigation > button:hover {
+        background-color: #bbe1fa;
+        color: #162447;
+    }
+
+    div.react-calendar__navigation > button:focus {
+        background-color: #bbe1fa;
+        color: #162447;
+    }
+
+    button.react-calendar__month-view__days__day--weekend {
+        color: #e43f5a;
+    }
+}

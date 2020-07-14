@@ -1,3 +1,18 @@
 .container {
     margin-top: 10px;
 }
+
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #bbe1fa;
+        background: #162447;
+    }
+
+    button.pure-button {
+        background: #3282b8;
+    }
+
+    input {
+        color: #000;
+    }
+}

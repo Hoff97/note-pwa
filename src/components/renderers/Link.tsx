@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import './link.css';
+
 import { ReactTinyLink } from 'react-tiny-link';
 
 export function isPreviewLink(props: any) {

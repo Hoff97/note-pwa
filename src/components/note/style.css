@@ -36,3 +36,25 @@ input.editName {
     overflow: hidden;
     word-break: keep-all;
 }
+
+@media (prefers-color-scheme: dark) {
+    textarea {
+        background: #1f4068;
+    }
+
+    div.react-mde {
+        background: #1f4068;
+    }
+
+    div.mde-header {
+        background: #1f4068;
+    }
+
+    svg {
+        color: #bbe1fa;
+    }
+
+    blockquote {
+        color: #88b1ca !important;
+    }
+}
