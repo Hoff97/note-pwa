@@ -18,6 +18,7 @@ export interface Note extends HasIdTimestamp {
     name: string;
     markdown: string;
     color: Color;
+    favorite: boolean;
 }
 
 export type NoteType = 'empty' | 'checklist';
@@ -30,12 +31,16 @@ export interface NetworkData<T extends HasIdTimestamp> {
     data: WithoutIdTimestamp<T>;
 }
 
-export function toNetworkData<T extends HasIdTimestamp>(data: T): NetworkData<T> {
-    const copy = {
+export function toNetworkData<T extends HasIdTimestamp>(data: T, validate: ((entity: T) => T) | undefined): NetworkData<T> {
+    let copy = {
         ...data
     };
     delete copy.id;
     delete copy.timestamp;
+
+    if (validate) {
+        copy = validate(copy);
+    }
 
     return {
         id: data.id,
@@ -44,13 +49,17 @@ export function toNetworkData<T extends HasIdTimestamp>(data: T): NetworkData<T>
     };
 }
 
-export function fromNetworkData<T extends HasIdTimestamp>(data: NetworkData<T>): T {
-    return {
+export function fromNetworkData<T extends HasIdTimestamp>(data: NetworkData<T>, validate: ((entity: T) => T) | undefined): T {
+    let result = {
         id: data.id,
         timestamp: data.timestamp,
         synchronized: true,
         ...data.data
     } as any;
+    if (validate) {
+        result = validate(result);
+    }
+    return result;
 }
 
 export interface NetworkNote extends NetworkData<Note> {

@@ -20,7 +20,12 @@ export class SyncService<T extends HasIdTimestamp> {
         if (entities === null) {
             entities = "[]";
         }
-        return JSON.parse(entities);
+        const result: T[] = JSON.parse(entities);
+        if (this.entityService.validate !== undefined) {
+            const validate = this.entityService.validate;
+            return result.map(x => validate(x));
+        }
+        return result;
     }
 
     async getEntities(): Promise<T[]> {

@@ -2,7 +2,8 @@ import React from 'react';
 
 import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faEdit, faStar } from '@fortawesome/free-solid-svg-icons'
+import { faStar as faStarOutline } from '@fortawesome/free-regular-svg-icons';
 import { MarkDownWrap } from '../mdWrap/MarkDownWrap';
 import { colorClass } from '../note/Note';
 import { Color } from '../../util/types';
@@ -10,37 +11,16 @@ import { noteService } from '../../util/note';
 
 interface NotePreviewProps {
     id: string;
+    markdown: string,
+    name: string,
+    color: Color,
+    favorite: boolean,
     deleteClicked: (id: string) => void;
     editClicked: (id: string) => void;
+    favoriteClicked: (id: string) => void;
 }
 
-interface NotePreviewState {
-    markdown: string;
-    name: string;
-    color: Color;
-}
-
-export class NotePreview extends React.Component<NotePreviewProps, NotePreviewState> {
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            markdown: '',
-            name: '',
-            color: 'white'
-        };
-
-        const note = noteService.getEntity(this.props.id);
-
-        if (note) {
-            this.state = {
-                markdown: note.markdown,
-                name: note.name,
-                color: note.color
-            };
-        }
-    }
-
+export class NotePreview extends React.Component<NotePreviewProps> {
     edit(ev: React.MouseEvent) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -53,11 +33,20 @@ export class NotePreview extends React.Component<NotePreviewProps, NotePreviewSt
         this.props.deleteClicked(this.props.id);
     }
 
+    favorite(ev: React.MouseEvent) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.favoriteClicked(this.props.id);
+    }
+
     render() {
         return (
-            <div className={`preview ${colorClass(this.state.color)}`}>
+            <div className={`preview ${colorClass(this.props.color)}`}>
                 <div className="title">
-                    {this.state.name}
+                    {this.props.name}
+                    <span className="favorite" onClick={ev => this.favorite(ev)}>
+                        <FontAwesomeIcon icon={this.props.favorite ? faStar : (faStarOutline as any)} />
+                    </span>
                     <span className="delete" onClick={ev => this.delete(ev)}>
                         <FontAwesomeIcon icon={faTrash}/>
                     </span>
@@ -66,7 +55,7 @@ export class NotePreview extends React.Component<NotePreviewProps, NotePreviewSt
                     </span>
                 </div>
                 <MarkDownWrap
-                    value={this.state.markdown}
+                    value={this.props.markdown}
                     onChange={() => {}}/>
             </div>
         );

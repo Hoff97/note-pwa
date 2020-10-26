@@ -73,7 +73,8 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                 name: 'Placeholder',
                 color: 'white',
                 timestamp: '',
-                synchronized: false
+                synchronized: false,
+                favorite: false
             },
             tab: 'write',
             editTitle: false,

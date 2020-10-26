@@ -45,7 +45,8 @@ export class Home extends React.Component<{}, HomeState> {
         const note: NewNote = {
             name: 'New Note',
             markdown: type === 'empty' ? '' : '- [ ] ',
-            color: 'white'
+            color: 'white',
+            favorite: false
         }
 
         const id = await noteService.createEntity(note);
@@ -57,12 +58,24 @@ export class Home extends React.Component<{}, HomeState> {
         history.push(`/note/${id}?tab=${tab}`);
     }
 
-    deleteNote(id: string) {
-        noteService.deleteEntity(id).then(notes => {
-            this.setState({
-                notes: notes
-            });
+    async deleteNote(id: string) {
+        const notes = await noteService.deleteEntity(id);
+
+        this.setState({
+            notes: notes
         });
+    }
+
+    async favoriteNote(id: string) {
+        const note = noteService.getEntity(id);
+        if (note) {
+            note.favorite = !note.favorite;
+            await noteService.updateEntity(note);
+
+            this.setState({
+                notes: noteService.getEntitiesLocal()
+            });
+        }
     }
 
     login(history: any) {
@@ -78,6 +91,11 @@ export class Home extends React.Component<{}, HomeState> {
 
     render() {
         const sortedNotes = this.state.notes.sort((a, b) => {
+            if (a.favorite) {
+                return -1;
+            } else if (b.favorite) {
+                return 1;
+            }
             return new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1;
         });
 
@@ -108,9 +126,10 @@ export class Home extends React.Component<{}, HomeState> {
                         {sortedNotes.map(note => {
                             return <tr className="note" key={note.id}>
                                 <td className="note" onClick={() => this.toNote(note.id, history)}>
-                                    <NotePreview id={note.id}
+                                    <NotePreview {...note}
                                         deleteClicked={id => this.deleteNote(id)}
-                                        editClicked={id => this.toNote(id, history, 'write')}/>
+                                        editClicked={id => this.toNote(id, history, 'write')}
+                                        favoriteClicked={id => this.favoriteNote(id)}/>
                                 </td>
                             </tr>
                         })}
