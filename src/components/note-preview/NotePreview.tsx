@@ -7,7 +7,6 @@ import { faStar as faStarOutline } from '@fortawesome/free-regular-svg-icons';
 import { MarkDownWrap } from '../mdWrap/MarkDownWrap';
 import { colorClass } from '../note/Note';
 import { Color } from '../../util/types';
-import { noteService } from '../../util/note';
 
 interface NotePreviewProps {
     id: string;
