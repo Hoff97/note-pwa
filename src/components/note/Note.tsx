@@ -32,10 +32,15 @@ export function colorClass(color: Color) {
     return color;
 }
 
+const minimumTimeBetweenUpdates = 1000;
+
 export class NoteComponent extends React.Component<{}, NoteState> {
     input?: HTMLTextAreaElement;
 
     editorRef: React.RefObject<ReactMde>;
+
+    latestUpdate?: number;
+    updateTimeout?: NodeJS.Timeout;
 
     commands: CommandGroup[] = [
         ...commands.getDefaultCommands(),
@@ -197,10 +202,24 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             }
         });
 
-        noteService.updateEntity({
-            ...this.state.note,
-            markdown: value
-        });
+        if (this.updateTimeout !== undefined) {
+            clearTimeout(this.updateTimeout);
+            this.updateTimeout = undefined;
+        }
+
+        this.updateTimeout = setTimeout(() => {
+            const currentTime = (new Date()).valueOf();
+            const diff = this.latestUpdate === undefined ? 0 : currentTime - this.latestUpdate;
+
+            if (this.latestUpdate === undefined || diff > minimumTimeBetweenUpdates) {
+                noteService.updateEntity({
+                    ...this.state.note,
+                    markdown: value
+                });
+                this.latestUpdate = currentTime;
+            }
+            this.updateTimeout = undefined;
+        }, 1000);
     }
 
     setTab(tab: Tab) {
