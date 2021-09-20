@@ -12,6 +12,7 @@ export interface HasTimestamp {
 
 export interface HasIdTimestamp extends HasId, HasTimestamp {
     synchronized: boolean;
+    deleted?: boolean;
 }
 
 export interface Note extends HasIdTimestamp {

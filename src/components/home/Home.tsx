@@ -98,6 +98,7 @@ export class Home extends React.Component<{}, HomeState> {
             }
             return new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1;
         });
+        const filteredNotes = sortedNotes.filter(x => !x.deleted);
 
         return <Route render={({ history }) => (
             <div className="home">
@@ -123,7 +124,7 @@ export class Home extends React.Component<{}, HomeState> {
                                 }
                             </td>
                         </tr>
-                        {sortedNotes.map(note => {
+                        {filteredNotes.map(note => {
                             return <tr className="note" key={note.id}>
                                 <td className="note" onClick={() => this.toNote(note.id, history)}>
                                     <NotePreview {...note}

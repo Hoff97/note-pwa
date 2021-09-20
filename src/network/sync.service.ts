@@ -3,6 +3,21 @@ import { EntityService } from "./entity.service";
 import { loginService } from "./login.service";
 import { v4 as uuidv4 } from 'uuid';
 
+export function timeOut<T>(promise: Promise<T>, ms: number): Promise<T> {
+    return new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+            reject();
+        }, ms);
+
+        promise.then(value => {
+            clearTimeout(timeout);
+            resolve(value);
+        }).catch(reject);
+    })
+}
+
+const TIMEOUT_MS = 1000;
+
 export class SyncService<T extends HasIdTimestamp> {
     constructor(private entityService: EntityService<T>, private name: string){
         loginService.loggedInEv.subscribe(() => {
@@ -42,8 +57,14 @@ export class SyncService<T extends HasIdTimestamp> {
                 const localNewEnts: T[] = [];
                 const updates: T[] = [];
 
+                const toDelete: T[] = [];
+
                 for (let localEnt of localEntities) {
-                    if (entMap[localEnt.id] !== undefined) {
+                    if (localEnt.deleted) {
+                        if (entMap[localEnt.id] !== undefined) {
+                            toDelete.push(localEnt);
+                        }
+                    } else if (entMap[localEnt.id] !== undefined) {
                         const localDate = new Date(localEnt.timestamp);
                         const remoteDate = new Date(entMap[localEnt.id].timestamp);
                         if (localDate > remoteDate) {
@@ -67,6 +88,9 @@ export class SyncService<T extends HasIdTimestamp> {
                 }
                 for (let localUp of updates) {
                     await this.entityService.updateEntity(localUp);
+                }
+                for (let delEntity of toDelete) {
+                    await this.entityService.deleteEntity(delEntity.id);
                 }
 
                 entities = [
@@ -97,7 +121,7 @@ export class SyncService<T extends HasIdTimestamp> {
         let created;
         if (loginService.loggedIn()) {
             try {
-                created = await this.entityService.createEntity(copy);
+                created = await timeOut(this.entityService.createEntity(copy),TIMEOUT_MS);
             } catch (e) {
                 created = copy;
             }
@@ -115,12 +139,6 @@ export class SyncService<T extends HasIdTimestamp> {
 
     async updateEntity(entity: T) {
         entity.timestamp = (new Date()).toISOString();
-        if (loginService.loggedIn()) {
-            try {
-                await this.entityService.updateEntity(entity);
-            } catch (e) {
-            }
-        }
 
         const entities = this.getEntitiesLocal();
 
@@ -133,6 +151,13 @@ export class SyncService<T extends HasIdTimestamp> {
         }
 
         this.storeEntities(entities);
+
+        if (loginService.loggedIn()) {
+            try {
+                await this.entityService.updateEntity(entity);
+            } catch (e) {
+            }
+        }
     }
 
     getEntity(id: string): T | undefined {
@@ -149,23 +174,31 @@ export class SyncService<T extends HasIdTimestamp> {
     }
 
     async deleteEntity(id: string): Promise<T[]> {
-        if (loginService.loggedIn()) {
-            try {
-                await this.entityService.deleteEntity(id);
-            } catch {
-            }
-        }
-        const notes = this.getEntitiesLocal();
-
+        let notes = this.getEntitiesLocal();
         for (let i = 0; i < notes.length; i++) {
             // eslint-disable-next-line
             if (notes[i].id == id) {
-                notes.splice(i, 1);
-                break;
+                notes[i].deleted = true;
             }
         }
-
         this.storeEntities(notes);
+
+        if (loginService.loggedIn()) {
+            try {
+                await timeOut(this.entityService.deleteEntity(id), TIMEOUT_MS);
+
+                notes = this.getEntitiesLocal();
+                for (let i = 0; i < notes.length; i++) {
+                    // eslint-disable-next-line
+                    if (notes[i].id == id) {
+                        notes.splice(i, 1);
+                        break;
+                    }
+                }
+                this.storeEntities(notes);
+            } catch {
+            }
+        }
 
         return notes;
     }
