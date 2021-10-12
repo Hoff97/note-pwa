@@ -15,3 +15,26 @@ button.login {
 button.logout {
     float: right;
 }
+
+.loading-spinner {
+    margin-left: 20px;
+    display: inline;
+    position: relative;
+    top: 5px;
+}
+
+.loading-spinner-icon {
+    animation-name: spin;
+    animation-duration: 1600ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}

@@ -5,7 +5,7 @@ import "react-mde/lib/styles/css/react-mde-all.css";
 
 import { Note, colors, Color } from '../../util/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faEyeDropper, faCircle } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faEyeDropper, faCircle, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import './style.css';
 
@@ -26,6 +26,7 @@ interface NoteState {
     tab: Tab;
     editTitle: boolean;
     loaded: boolean;
+    updating: boolean;
 }
 
 export function colorClass(color: Color) {
@@ -83,7 +84,8 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             },
             tab: 'write',
             editTitle: false,
-            loaded: false
+            loaded: false,
+            updating: false
         };
 
         this.editorRef = React.createRef();
@@ -212,9 +214,12 @@ export class NoteComponent extends React.Component<{}, NoteState> {
             const diff = this.latestUpdate === undefined ? 0 : currentTime - this.latestUpdate;
 
             if (this.latestUpdate === undefined || diff > minimumTimeBetweenUpdates) {
+                this.setState({updating: true});
                 noteService.updateEntity({
                     ...this.state.note,
                     markdown: value
+                }).then(v => {
+                    this.setState({updating: false});
                 });
                 this.latestUpdate = currentTime;
             }
@@ -340,6 +345,7 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                             <FontAwesomeIcon icon={faPen}/>
                         </span>
                     </div>
+                    {this.state.updating ? <FontAwesomeIcon icon={faSpinner} className="loading-spinner-icon"/> : <></>}
                 </div>
             );
         } else {
@@ -353,6 +359,7 @@ export class NoteComponent extends React.Component<{}, NoteState> {
                     <span className="edit">
                         <FontAwesomeIcon icon={faPen}/>
                     </span>
+                    {this.state.updating ? <FontAwesomeIcon icon={faSpinner} className="loading-spinner-icon"/> : <></>}
                 </div>
             )
         }

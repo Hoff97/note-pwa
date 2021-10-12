@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 import { NotePreview } from '../note-preview/NotePreview';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCheckSquare, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCheckSquare, faUser, faSignOutAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import './style.css';
 import { loginService } from '../../network/login.service';
@@ -15,6 +15,7 @@ interface HomeState {
     notes: Note[];
     choosing: boolean;
     loggedIn: boolean;
+    updating: boolean;
 }
 
 export class Home extends React.Component<{}, HomeState> {
@@ -24,32 +25,39 @@ export class Home extends React.Component<{}, HomeState> {
         this.state = {
             notes: [],
             choosing: false,
-            loggedIn: false
+            loggedIn: false,
+            updating: true
         };
     }
 
     componentDidMount(){
         this.setState({
             notes: noteService.getEntitiesLocal(),
-            loggedIn: loginService.loggedIn()
+            loggedIn: loginService.loggedIn(),
+            updating: true
         });
 
         noteService.getEntities().then(notes => {
+            console.log("Updated!");
             this.setState({
-                notes
+                notes,
+                updating: false
             });
         });
     }
 
     async newNote(history: any, type: NoteType = 'empty') {
+        this.setState({updating: true});
         const note: NewNote = {
             name: 'New Note',
             markdown: type === 'empty' ? '' : '- [ ] ',
             color: 'white',
-            favorite: false
+            favorite: false,
         }
 
         const id = await noteService.createEntity(note);
+
+        this.setState({updating: false});
 
         history.push(`/note/${id}?tab=write`);
     }
@@ -59,10 +67,12 @@ export class Home extends React.Component<{}, HomeState> {
     }
 
     async deleteNote(id: string) {
+        this.setState({updating: true});
         const notes = await noteService.deleteEntity(id);
 
         this.setState({
-            notes: notes
+            notes: notes,
+            updating: false
         });
     }
 
@@ -70,10 +80,14 @@ export class Home extends React.Component<{}, HomeState> {
         const note = noteService.getEntity(id);
         if (note) {
             note.favorite = !note.favorite;
+
+            this.setState({updating: true});
+
             await noteService.updateEntity(note);
 
             this.setState({
-                notes: noteService.getEntitiesLocal()
+                notes: noteService.getEntitiesLocal(),
+                updating: false
             });
         }
     }
@@ -112,6 +126,12 @@ export class Home extends React.Component<{}, HomeState> {
                                 <button className="pure-button" onClick={() => this.newNote(history, 'checklist')}>
                                     <FontAwesomeIcon icon={faCheckSquare}/>
                                 </button>
+                                {this.state.updating ? (
+                                    <div className="loading-spinner"><FontAwesomeIcon icon={faSpinner} size="2x" className="loading-spinner-icon"/></div>
+                                    ) : (
+                                    <></>
+                                    )
+                                }
                                 {!this.state.loggedIn ? (
                                     <button className="pure-button login" onClick={() => this.login(history)}>
                                         <FontAwesomeIcon icon={faUser}/>
